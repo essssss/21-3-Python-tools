@@ -240,3 +240,195 @@ You have to _import_ them.
    from random import choice
    ```
    -  change the function name with `as` keyword
+
+---
+
+## Sharing code between files:
+
+Sometimes we want to share code between files (say, helper code in one file that we want to share across ten other files...or object oriented classes usually go in one file.).
+
+<center>score.py</center>
+
+```py
+def get_high_score():
+    ...
+
+def save_high_score():
+    ...
+```
+
+<center>game.py</center>
+
+```py
+from score import get_high_score
+
+high = get_high_score()
+```
+
+Nothing "export" related! Only import.
+
+---
+
+-  We're working in `helpers.py` and `people.py`
+
+---
+
+## Installing third-party libraries:
+
+There are bazillion libraries for python. (eg ipython)
+
+Using `pip`:
+
+```zsh
+$ pip3 install forex_python
+... pip output here...
+$ ipython
+In [1]: from forex_python.converter import convert
+In [2]: convert("USD", "GBP", 10)
+7.6543
+```
+
+Basically, `pip3 install library_name`
+
+When a package/library is installed, it will be installed **globally** on your computer
+
+-  soon we will learn about Virtual Environments and stuff in order to keep installs separated, maybe if we want different versions.
+
+---
+
+`PyPI` is where python libraries can be found.
+
+---
+
+# Virtual Environments
+
+Normally, **_pip_** makes the install library available everywhere.  
+This is convenient but can be messy:
+
+-  you might not need a tool for every project you make.
+-  you might want to keep track more explicitly of what libraries a project needs.
+-  you might want a different version of a library on a per-project basis
+
+## Python is here to help! With **_Virtual Environments_**!
+
+# Creating a Virtual Environment:
+
+`python3 -m venv venv`  
+("using `venv` module, make a folder, `venv`, with all the needed stuff)  
+"venv" is a standard name for that folder.
+
+That makes the Virtual Environment folder, but we are not using it yet,  
+`source venv/bin/activate`
+
+-  note that our command shell prompt will change!
+-  also make sure we are in the right directory.
+
+### We only need to create the virtual environment ONCE. BUT we need to do the `source` command every time we close terminal or w/e
+
+## Using my virtual environment
+
+-  What does it mean to be 'using' a virtual environment
+   -  It makes certain `python` is the version of Python used to create the venv
+      -  eg: `python3`
+   -  We have access to the standard library of python
+   -  We do NOT have access to those globally installed using `pip`
+   -  We get to explicitly install what we want. - and it will only be here!
+
+## Installing into my Virtual Environment
+
+-  Make sure you're using your venv - Do you see it in your prompt?
+-  Use `pip install` as normal
+   -  But now it's downlaoded and installed into that venv folder
+   -  It won't be available/confuse global Python or other venvs - tidy!
+
+Run `deactivate` to leave the venv
+
+---
+
+# More on Virtual Environments
+
+Tracking Required Libraries:
+
+-  To see a list of libraries in a venv:
+   ```
+   $ pip3 freeze
+   ... list of installed things...
+   ```
+-  it is helpful to save this list to a special file: `requirements.txt`
+
+   ```
+   $ pip3 freeze > requirements.txt
+   ```
+
+-  Virtual environments are large & full of stuff you did not write yourself
+-  You **don't want this to get into git / Github**
+-  Typically add `venv` to the project's `.gitignore`
+   -  use `git status` to make sure it is being ignored
+-  make sure you keep updating requirements.txt anytime you install a new package
+
+---
+
+# Recreating a Virtual Environment
+
+When using a new Python project:
+
+```
+% git clone http://path-to-project
+% cd that-project
+% python3 -m venv venv
+% source venv/bin/activate
+```
+
+-  To install the required packages:
+
+```
+pip install -r requirements.txt
+```
+
+---
+
+---
+
+---
+
+# Files
+
+You can open an on-disk file with `open(filepath, mode)`
+
+-  `filepath`: absolute or relative path to file
+-  `mode`: string of how to open the file (eg, `"r"` for reading or `"w"` for writing)
+
+This returns a file-type instance
+
+## Reading
+
+Line-by-line:
+
+```py
+file = open("/my/file.txt")
+
+for line in file:
+    print("line=", line)
+
+file.seek(0)
+
+file.close()
+```
+
+-  when we go through a file line-by-line, we kinda like move the tape head.
+-  method `.seek(x)` moves the 'tapehead'
+
+## Writing
+
+```py
+file = open("/my/file.txt", "w")
+
+file.write("This is a new line.")
+file.write("So is this.")
+
+file.close
+```
+
+-  `"w"` mode will rewrite the file.
+-  `"a"` mode is for appending.
+-  Writing on a file that doesn't exist will create that file.
